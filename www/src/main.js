@@ -83,8 +83,10 @@ function setupControls() {
     { id: 'threshold', valueEl: 'threshold-value' },
     { id: 'gamma', valueEl: 'gamma-value' },
     { id: 'pixelation', valueEl: 'pixelation-value' },
-    { id: 'blur', valueEl: 'blur-value' }
+    { id: 'blur', valueEl: 'blur-value' },
+    { id: 'block-scale', valueEl: 'block-scale-value' }  // Added block-scale slider.
   ];
+  
   sliders.forEach(slider => {
     const el = document.getElementById(slider.id);
     const valueEl = document.getElementById(slider.valueEl);
@@ -133,13 +135,14 @@ function updateCanvas() {
   const pixelation = parseInt(document.getElementById('pixelation').value);
   const blur = parseInt(document.getElementById('blur').value);
   const algorithm = document.getElementById('algorithm').value;
+  const blockScale = parseInt(document.getElementById('block-scale').value);
 
   if (algorithm === "threshold") {
     threshold_dither(imageData.data, imageData.width, imageData.height, threshold, contrast, gamma, pixelation, blur);
   } else if (algorithm === "floyd-steinberg") {
     floyd_steinberg_dither(imageData.data, imageData.width, imageData.height, threshold, contrast, gamma, pixelation, blur);
   } else if (algorithm === "ordered_dither") {
-    ordered_dither(imageData.data, imageData.width, imageData.height, threshold, contrast, gamma, pixelation, blur);
+    ordered_dither(imageData.data, imageData.width, imageData.height, threshold, contrast, gamma, pixelation, blur, blockScale);
   }
 
   if (customPalette.length > 0) {

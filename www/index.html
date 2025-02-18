@@ -28,9 +28,9 @@
             <div class="control-group">
               <label for="algorithm">Algorithm:</label>
               <select id="algorithm">
-                <option value="ordered_dither">Ordered Dither</option>
-                <option value="threshold">Threshold Dither</option>
-                <option value="floyd-steinberg">Floyd‑Steinberg Dither</option>
+                <option value="ordered_dither">Bayer-Ordered</option>
+                <option value="floyd-steinberg">Floyd‑Steinberg</option>
+                <option value="threshold">Threshold</option>
               </select>
             </div>
           </div>
@@ -55,6 +55,11 @@
               <label for="pixelation">Pixelation:</label>
               <input type="range" id="pixelation" min="1" max="10" value="1">
               <span id="pixelation-value">1</span>
+            </div>
+            <div class="control-group">
+              <label for="block-scale">Block Scale</label>
+              <input id="block-scale" type="range" min="1" max="20" step="0.5" value="1">
+              <span id="block-scale-value">1</span>              
             </div>
             <div class="control-group">
               <label for="blur">Blur:</label>
