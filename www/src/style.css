@@ -1,0 +1,331 @@
+/* =========================================
+   Global Reset & Base Styles
+========================================= */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Root variables for fonts, colors, and transitions */
+:root {
+  font-family: "Fira Code", "Source Code Pro", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+  
+  --color-text-light: #2e2e2e;
+  --color-bg-light: #f9f9f9;
+  --color-text-dark: #f0f0f0;
+  --color-bg-dark: #2c3e50;
+  
+  --color-primary: #646cff;
+  --color-secondary: #f0c27b;
+  --color-accent: #f5ca8a;
+  
+  --transition-duration: 0.25s;
+}
+
+html {
+  font-size: 16px;
+  line-height: 1.5;
+  color-scheme: light dark;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #fefefe, #e8f0ff);
+  background-color: var(--color-bg-light);
+  color: var(--color-text-light);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* =========================================
+   Layout & Containers
+========================================= */
+.main-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+/* Canvas Container & Frame */
+.canvas-container {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.canvas-frame {
+  position: relative;
+  width: 600px;
+  height: 600px;
+  background-color: #fff;
+  border: 4px solid var(--color-secondary);
+  border-radius: 0; /* Sharp square edges */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+#demo-canvas {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Zoom Controls */
+.zoom-controls {
+  font-size: 0.9em;
+  background: #fff;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-secondary);
+  border-radius: 0;
+  color: #333;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.zoom-controls label,
+.zoom-controls span {
+  margin-right: 0.5rem;
+  font-weight: 500;
+}
+
+/* Controls Panel */
+.controls-container {
+  flex: 1;
+  min-width: 280px;
+  background: #ffffff;
+  border: 1px solid var(--color-secondary);
+  border-radius: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 1.5rem;
+  color: #333;
+}
+
+.controls-container h1 {
+  text-align: center;
+  font-size: 1.6em;
+  margin-bottom: 1rem;
+}
+
+/* =========================================
+   Form Controls & Sliders
+========================================= */
+.controls {
+  margin-bottom: 1rem;
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.8rem;
+}
+
+.control-group label {
+  flex: 1;
+  font-size: 0.9em;
+  font-weight: 500;
+  margin-right: 0.5rem;
+}
+
+.control-group input[type="range"],
+.control-group select {
+  flex: 2;
+}
+
+/* Custom square slider styling */
+input[type="range"] {
+  -webkit-appearance: none;
+  background: transparent;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 6px;
+  background: #ccc;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 20px;
+  width: 20px;
+  background: var(--color-primary);
+  border: 1px solid #aaa;
+  margin-top: -7px; /* Centers thumb on track */
+  border-radius: 0; /* Square edges */
+}
+
+input[type="range"]::-moz-range-track {
+  height: 6px;
+  background: #ccc;
+}
+
+input[type="range"]::-moz-range-thumb {
+  height: 20px;
+  width: 20px;
+  background: var(--color-primary);
+  border: 1px solid #aaa;
+  border-radius: 0;
+}
+
+.control-group span {
+  width: 2.5em;
+  text-align: right;
+  margin-left: 0.5rem;
+  font-weight: 500;
+}
+
+/* =========================================
+   Palette Controls
+========================================= */
+.palette-controls h2 {
+  text-align: center;
+  margin: 1rem 0 0.5rem;
+  font-size: 1.2em;
+}
+
+.palette-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.palette-item {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #ccc;
+  border-radius: 0;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* =========================================
+   Modal Styling
+========================================= */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 1.5rem;
+  border: 1px solid var(--color-secondary);
+  border-radius: 0;
+  text-align: center;
+  color: #000;
+  width: 300px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.modal-buttons {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-around;
+}
+
+/* =========================================
+   Buttons & Interactions
+========================================= */
+button {
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 0.95em;
+  font-weight: 500;
+  background: var(--color-secondary);
+  color: #333;
+  border-radius: 0;
+  cursor: pointer;
+  transition: background var(--transition-duration), border-color var(--transition-duration);
+}
+
+button:hover {
+  background: var(--color-accent);
+}
+
+button:focus,
+button:focus-visible {
+  outline: 4px solid var(--color-primary);
+}
+
+/* =========================================
+   Dark Theme Adjustments
+========================================= */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: var(--color-text-dark);
+    background: var(--color-bg-dark);
+  }
+  
+  body {
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+  }
+  
+  .zoom-controls,
+  .controls-container {
+    background: #3a3a3a;
+    color: #fff;
+    border-color: var(--color-secondary);
+  }
+  
+  .canvas-frame {
+    background-color: #1a1a1a;
+    border-color: var(--color-secondary);
+  }
+  
+  .modal-content {
+    background: #2c2c2c;
+    color: #f0f0f0;
+    border-color: var(--color-secondary);
+  }
+  
+  button {
+    background: var(--color-primary);
+    color: #f0f0f0;
+  }
+  
+  button:hover {
+    background: #7e8bff;
+  }
+}
+
+/* =========================================
+   Responsive Tweaks
+========================================= */
+@media (max-width: 800px) {
+  .main-content {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .canvas-container,
+  .controls-container {
+    width: 90%;
+    max-width: 700px;
+  }
+  
+  .canvas-frame {
+    width: 100%;
+    height: auto;
+  }
+}
