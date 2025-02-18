@@ -5,6 +5,7 @@ const canvas = document.getElementById('demo-canvas');
 const ctx = canvas.getContext('2d');
 
 let customPalette = [];
+let cachedPaletteRGB = [];
 
 const presetPalettes = [
   { name: 'Original', value: 'original', colors: [] },
@@ -15,15 +16,13 @@ const presetPalettes = [
   { name: 'Black & White', value: 'blackwhite', colors: ['#ffffff', '#000000'] }
 ];
 
-let activeSwatchIndex = null; 
-
+let activeSwatchIndex = null;
 
 let panX = 0, panY = 0;
 let isPanning = false;
 let startPan = { x: 0, y: 0 };
 
 const canvasFrame = document.querySelector('.canvas-frame');
-
 canvasFrame.addEventListener('mousedown', (e) => {
   isPanning = true;
   startPan = { x: e.clientX, y: e.clientY };
@@ -40,7 +39,6 @@ document.addEventListener('mousemove', (e) => {
 document.addEventListener('mouseup', () => {
   isPanning = false;
 });
-
 
 function updateCanvasTransform() {
   const zoom = parseFloat(document.getElementById('zoom').value);
@@ -65,7 +63,7 @@ async function initCanvas() {
   updateCanvas();
 }
 
-// scheduler to throttle canvas updates.
+// Throttle canvas updates with requestAnimationFrame.
 let canvasUpdateScheduled = false;
 function scheduleCanvasUpdate() {
   if (!canvasUpdateScheduled) {
@@ -78,31 +76,28 @@ function scheduleCanvasUpdate() {
 }
 
 function setupControls() {
-  const sliders = [
+  const sliderConfigs = [
     { id: 'contrast', valueEl: 'contrast-value' },
     { id: 'threshold', valueEl: 'threshold-value' },
     { id: 'gamma', valueEl: 'gamma-value' },
     { id: 'pixelation', valueEl: 'pixelation-value' },
     { id: 'blur', valueEl: 'blur-value' },
-    { id: 'block-scale', valueEl: 'block-scale-value' }  // Added block-scale slider.
+    { id: 'block-scale', valueEl: 'block-scale-value' },
   ];
-  
-  sliders.forEach(slider => {
-    const el = document.getElementById(slider.id);
-    const valueEl = document.getElementById(slider.valueEl);
-    el.addEventListener('input', () => {
-      valueEl.textContent = el.value;
+  sliderConfigs.forEach(config => {
+    const slider = document.getElementById(config.id);
+    const valueEl = document.getElementById(config.valueEl);
+    slider.addEventListener('input', () => {
+      valueEl.textContent = slider.value;
       scheduleCanvasUpdate();
     });
   });
-  
   const zoomSlider = document.getElementById('zoom');
   const zoomValueEl = document.getElementById('zoom-value');
   zoomSlider.addEventListener('input', () => {
     zoomValueEl.textContent = zoomSlider.value;
     updateCanvasTransform();
   });
-  
   document.getElementById('algorithm').addEventListener('change', scheduleCanvasUpdate);
   document.getElementById('presetPalettes').addEventListener('change', presetPaletteSelected);
   document.getElementById('add-color-btn').addEventListener('click', addNewSwatch);
@@ -126,6 +121,7 @@ function setupControls() {
 }
 
 function updateCanvas() {
+  // Clone original data to avoid modifying the cached image.
   const newData = new Uint8ClampedArray(originalImageData.data);
   const imageData = new ImageData(newData, originalImageData.width, originalImageData.height);
 
@@ -146,7 +142,7 @@ function updateCanvas() {
   }
 
   if (customPalette.length > 0) {
-    applyCustomPalette(imageData, customPalette);
+    applyCustomPalette(imageData);
   }
   ctx.putImageData(imageData, 0, 0);
 }
@@ -158,14 +154,16 @@ function hexToRgb(hex) {
   return { r: (num >> 16) & 255, g: (num >> 8) & 255, b: num & 255 };
 }
 
-function applyCustomPalette(imageData, palette) {
+function applyCustomPalette(imageData) {
+  if (!cachedPaletteRGB.length || cachedPaletteRGB.length !== customPalette.length) {
+    cachedPaletteRGB = customPalette.map(hex => hexToRgb(hex));
+  }
   const data = imageData.data;
-  const n = palette.length;
-  const paletteRGB = palette.map(hex => hexToRgb(hex));
+  const n = cachedPaletteRGB.length;
   for (let i = 0; i < data.length; i += 4) {
     const lum = data[i];
     const index = Math.round((lum / 255) * (n - 1));
-    const color = paletteRGB[index];
+    const color = cachedPaletteRGB[index];
     data[i] = color.r;
     data[i + 1] = color.g;
     data[i + 2] = color.b;
@@ -187,18 +185,21 @@ function presetPaletteSelected(e) {
   const selected = e.target.value;
   const preset = presetPalettes.find(p => p.value === selected);
   customPalette = (preset && preset.colors.length > 0) ? [...preset.colors] : [];
+  cachedPaletteRGB = []; // Reset cache
   updatePaletteUI();
   scheduleCanvasUpdate();
 }
 
 function addNewSwatch() {
   customPalette.push('#ffffff');
+  cachedPaletteRGB = [];
   updatePaletteUI();
   scheduleCanvasUpdate();
 }
 
 function clearPalette() {
   customPalette = [];
+  cachedPaletteRGB = [];
   updatePaletteUI();
   scheduleCanvasUpdate();
 }
@@ -247,6 +248,7 @@ function importPalette() {
       const imported = JSON.parse(input);
       if (Array.isArray(imported)) {
         customPalette = imported;
+        cachedPaletteRGB = [];
         updatePaletteUI();
         scheduleCanvasUpdate();
       } else {
@@ -255,5 +257,14 @@ function importPalette() {
     } catch (e) {
       alert("Error parsing palette JSON.");
     }
+  }
+}
+
+function removeSwatch(index) {
+  if (index !== null && index >= 0 && index < customPalette.length) {
+    customPalette.splice(index, 1);
+    cachedPaletteRGB = [];
+    updatePaletteUI();
+    scheduleCanvasUpdate();
   }
 }
