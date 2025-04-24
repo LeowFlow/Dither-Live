@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- app.html -->
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BZZRE2NYQ3"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-BZZRE2NYQ3');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Browser-Based Dither Editor</title>
+  <meta name="description"
+        content="Edit and export stunning retro-style dithered images in real time, right in your browser with Dither.Live—no install required." />
+  <meta name="robots" content="index,follow" />
+  <link rel="canonical" href="https://dither.live/app.html" />
+
+  <!-- Open Graph -->
+  <meta property="og:title"       content="Browser-Based Dither Editor" />
+  <meta property="og:description" content="Edit and export stunning retro-style dithered images in real time with Dither.Live." />
+  <meta property="og:url"         content="https://dither.live/app.html" />
+  <meta property="og:image"       content="https://dither.live/social-preview-editor.png" />
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "url": "https://dither.live/",
+    "name": "Dither.Live"
+  }
+  </script>
+
+  <!-- Styles & Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="src/css/reset.css" />
+  <link rel="stylesheet" href="src/css/base.css" />
+  <link rel="stylesheet" href="src/css/layout.css" />
+  <link rel="stylesheet" href="src/css/theme.css" />
+  <link rel="icon" href="/dither-live.ico" type="image/x-icon" />
+
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+</head>
+  <body data-theme="dark" class="no-select">
+    <div id="app">
+      <!-- Main Content Area -->
+      <div class="main-content">
+        <a href="/" class="home-button" title="Return to homepage">Back to homepage</a>
+        <div class="canvas-frame">
+          <canvas id="demo-canvas" tabindex="0"></canvas>
+        </div>
+        <!-- Controls Sidebar -->
+        <div class="controls-container">
+          <canvas id="logo-canvas" class="config-logo"></canvas>
+          <hr class="control-divider" />
+          <div class="control-group">
+            </label>
+            
+          </div>
+          <!-- Algorithm Selection -->
+          <h2>Select Algorithm</h2>
+          <div class="custom-select-wrapper">
+            <div class="custom-select" tabindex="0">
+              <span class="selected-option">Jarvis, Judice &amp; Ninke</span>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <ul class="custom-options">
+              <li class="custom-option" data-value="bayer">Bayer (Ordered)</li>
+              <li class="custom-option" data-value="floyd-steinberg">Floyd‑Steinberg</li>
+              <li class="custom-option selected" data-value="jarvis">Jarvis, Judice &amp; Ninke</li>
+              <li class="custom-option" data-value="atkinson">Atkinson</li>
+              <li class="custom-option" data-value="sierra">Sierra (Sierra‑3)</li>
+              <li class="custom-option" data-value="sierra-two-row">Two‑Row Sierra</li>
+              <li class="custom-option" data-value="sierra-lite">Sierra Lite</li>
+              <li class="custom-option" data-value="threshold">Threshold</li>
+            </ul>
+            <input type="hidden" id="algorithm" name="algorithm" value="jarvis">
+          </div>
+          <!-- Bayer matrix size selectors -->
+          <div class="bayer-options">
+            <div class="control-group">
+              <label>Bayer Matrix Width:</label>
+              <div class="custom-number-input" id="custom-bayer-width" data-min="1" data-max="8">
+                <button class="decrement">–</button>
+                <span class="number-display" contenteditable="true">4</span>
+                <button class="increment">+</button>
+              </div>
+            </div>
+            <div class="control-group">
+              <label>Bayer Matrix Height:</label>
+              <div class="custom-number-input" id="custom-bayer-height" data-min="1" data-max="8">
+                <button class="decrement">–</button>
+                <span class="number-display" contenteditable="true">4</span>
+                <button class="increment">+</button>
+              </div>
+            </div>
+          </div>
+
+          
+          <hr class="control-divider" />
+          <!-- File Upload Section -->
+          <details title="Upload an image file (Max 4MB)">
+            <summary title="Click to upload a file"><i class="fas fa-upload"></i> File Upload</summary>
+            <div class="controls">
+              <div class="control-group">
+                <label for="file-input" title="Select an image file to upload">(Max Size 20MB):</label>
+                <input id="file-input" type="file" accept="image/*" title="Browse for an image" />
+              </div>
+            </div>
+          </details>
+          <!-- Output Size Section -->
+          <details title="Set custom output dimensions for your image">
+            <summary title="Click to adjust output size"><i class="fas fa-expand"></i> Output Size</summary>
+            <hr class="control-divider" />
+            <div class="controls">
+              <div class="control-group">
+                <label for="output-width" title="Set the output image width">Width:</label>
+                <input type="number" id="output-width" value="800" min="1" title="Enter width in pixels" />
+              </div>
+              <div class="control-group">
+                <label for="output-height" title="Set the output image height">Height:</label>
+                <input type="number" id="output-height" value="600" min="1" title="Enter height in pixels" />
+              </div>
+              <div class="control-group">
+                <input type="checkbox" id="lock-aspect-checkbox" checked title="Lock aspect ratio when resizing" />
+                <label for="lock-aspect-checkbox" title="Keep aspect ratio locked">Lock Aspect Ratio</label>
+              </div>
+              <div class="control-group">
+                <button id="apply-output-size-btn" title="Apply custom output dimensions">Apply Size</button>
+                <button id="scale-x1-btn" title="Scale: 0.5x">0.5x</button>
+                <button id="scale-x2-btn" title="Scale: 1x">1x</button>
+                <button id="scale-x3-btn" title="Scale: 2x">2x</button>
+              </div>              
+            </div>
+          </details>
+          <!-- Adjustments Section -->
+          <details open title="Adjust image parameters like scale, contrast, and more">
+            <summary title="Click to expand/collapse adjustments"><i class="fas fa-sliders-h"></i> Adjustments</summary>
+            <hr class="control-divider" />
+            <div class="controls">
+              <div class="control-group">
+                <label for="block-scale" title="Adjust the scale of the dithering effect">Scale:</label>
+                <input id="block-scale" type="range" min="1" max="30" step="2" value="3" title="Slide to change the scale" />
+                <span id="block-scale-value" title="Current scale value">3</span>
+              </div>
+              
+              <div class="control-group">
+                <label for="contrast" title="Adjust the contrast of the image">Contrast:</label>
+                <input type="range" id="contrast" min="0" max="200" value="100" title="Slide to adjust contrast" />
+                <span id="contrast-value" title="Current contrast value">100</span>
+              </div>
+              <div class="control-group">
+                <label for="threshold" title="Set the luminance threshold for dithering">Luminance Threshold:</label>
+                <input type="range" id="threshold" min="0" max="255" value="128" title="Slide to change the threshold" />
+                <span id="threshold-value" title="Current threshold value">128</span>
+              </div>
+              <div class="control-group">
+                <label for="gamma" title="Adjust highlights and midtones">Highlights &amp; Midtones:</label>
+                <input type="range" id="gamma" min="0.5" max="2.0" step="0.1" value="1.0" title="Slide to adjust gamma" />
+                <span id="gamma-value" title="Current gamma value">1.0</span>
+              </div>
+              <div class="control-group">
+                <label for="pixelation" title="Control the mosaic pixelation level">Mosaic Pixelation:</label>
+                <input type="range" id="pixelation" min="1" max="10" step="1" value="5" title="Slide to adjust pixelation" />
+                <span id="pixelation-value" title="Current pixelation level">5</span>
+              </div>
+              <div class="control-group">
+                <label for="blur" title="Add blur to smooth the image">Blur:</label>
+                <input type="range" id="blur" min="0" max="10" value="0" title="Slide to adjust blur" />
+                <span id="blur-value" title="Current blur value">0</span>
+              </div>
+              <div class="control-group">
+                <input type="checkbox" id="invert-image-checkbox" title="Invert the image colors" />
+                <label for="invert-image" title="Click to invert image colors">Invert Image</label>
+              </div>
+            </div>
+            <button id="reset-controls-btn" title="Reset all adjustments to default">
+              <i class="fas fa-undo"></i> Reset Sliders
+            </button>
+          </details>
+        </div>
+        <!-- Bottom Toolbar (Zoom, Rotate, Export, Help, Live Preview) -->
+        <div class="bottom-toolbar">
+        <button id="help-btn" class="tooltip">
+          <i class="fas fa-question-circle"></i>
+          <span class="tooltiptext">View keyboard shortcuts</span>
+        </button>
+          <div class="zoom-group">
+            <label for="zoom" title="Zoom the image">Zoom:</label>
+            <input type="range" id="zoom" min="1" max="5" step="0.1" value="1" title="Slide to zoom in or out" />
+            <span id="zoom-value" title="Current zoom level">1.00</span>
+          </div>
+                    
+        <button id="toggle-preview-btn" class="tooltip">
+          <i class="fas fa-pause"></i>
+          <span class="tooltiptext">Live preview may decrease performance, especially with larger.</span>
+        </button>
+          <div class="rotate-group">
+            <button id="rotate-left-btn" title="Rotate the image left"><i class="fas fa-rotate-left"></i></button>
+            <button id="rotate-right-btn" title="Rotate the image right"><i class="fas fa-rotate-right"></i></button>
+          </div>
+          <button id="export-image-btn" title="Export the dithered image">
+            <i class="fas fa-file-export"></i> Export
+          </button>
+        </div>
+      </div>
+      <div class="version-number" title="Application version">Dither.Live — Version 0.7.0</div>
+
+      <!-- Downscale Confirmation Modal -->
+      <div id="downscale-warning-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+          <p>
+            The output dimensions are large and might cause performance issues.
+            Would you like to automatically downscale the image?
+          </p>
+          <label title="Suppress future warnings">
+            <input type="checkbox" id="suppress-downscale-warning-checkbox" /> Don't show again
+          </label>
+          <div class="modal-buttons">
+            <button id="downscale-yes-btn" title="Downscale the image">Yes, downscale</button>
+            <button id="downscale-no-btn" title="Proceed with current dimensions">No, proceed</button>
+          </div>
+        </div>
+      </div>
+      <!-- Notification Modal -->
+      <div id="notification-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+          <p id="notification-message"></p>
+          <div class="modal-buttons">
+            <button id="notification-ok-btn" title="OK">OK</button>
+          </div>
+        </div>
+      </div>
+      <!-- Drag & Drop Upload Modal -->
+      <div id="upload-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+          <p>Drop your image to upload...</p>
+        </div>
+      </div>
+      <script type="module" src="src/main.js"></script>
+    </div>
+    <!-- Large Dimensions Warning Modal -->
+    <div id="large-dim-warning-modal" class="modal" style="display: none;">
+      <div class="modal-content">
+        <p>
+          Warning: Using large dimensions in live preview can cause lag.
+          Consider disabling live preview for better performance.
+        </p>
+        <label title="Suppress future warnings">
+          <input type="checkbox" id="suppress-warning-checkbox" /> Don't show again
+        </label>
+        <div class="modal-buttons">
+          <button id="warning-ok-btn" title="Acknowledge warning">OK</button>
+        </div>
+      </div>
+    </div>
+    <!-- Help Modal -->
+    <div id="help-modal" class="modal" style="display: none;">
+      <div class="modal-content">
+        <h2 title="Keyboard shortcuts for quick access">Keyboard Shortcuts</h2>
+        <ul class="shortcut-list">
+          <li>
+            <span class="shortcut-keys"><kbd>Ctrl</kbd> + <kbd>S</kbd></span>
+            <span class="shortcut-desc">Save/Export</span>
+          </li>
+          <li>
+            <span class="shortcut-keys"><kbd>Ctrl</kbd> + <kbd>O</kbd></span>
+            <span class="shortcut-desc">Open File</span>
+          </li>
+          <li>
+            <span class="shortcut-keys"><kbd>Ctrl</kbd> + <kbd>+</kbd></span>
+            <span class="shortcut-desc">Zoom In</span>
+          </li>
+          <li>
+            <span class="shortcut-keys"><kbd>Ctrl</kbd> + <kbd>-</kbd></span>
+            <span class="shortcut-desc">Zoom Out</span>
+          </li>
+          <li>
+            <span class="shortcut-keys"><kbd>←</kbd></span>
+            <span class="shortcut-desc">Rotate Left</span>
+          </li>
+          <li>
+            <span class="shortcut-keys"><kbd>→</kbd></span>
+            <span class="shortcut-desc">Rotate Right</span>
+          </li>
+          <li>
+            <span class="shortcut-keys"><kbd>P</kbd></span>
+            <span class="shortcut-desc">Toggle Live Preview</span>
+          </li>
+          <li>
+            <span class="shortcut-keys"><kbd>I</kbd></span>
+            <span class="shortcut-desc">Invert Image</span>
+          </li>
+          <li>
+            <span class="shortcut-keys"><kbd>R</kbd></span>
+            <span class="shortcut-desc">Reset Sliders</span>
+          </li>
+          <li>
+            <span class="shortcut-keys"><kbd>D</kbd></span>
+            <span class="shortcut-desc">Toggle Themes</span>
+          </li>
+        </ul>
+        <div class="modal-buttons">
+          <button id="help-close-btn" title="Close this help window">OK</button>
+        </div>
+      </div>
+    </div>    
+  </body>
+</html>

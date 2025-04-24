@@ -1,0 +1,1145 @@
+/* layout.css */
+
+/* Layout & Containers */
+.main-content {
+  position: relative;
+  width: 100%;
+  min-height: 100vh; /* Changed from fixed height to fluid minimum height */
+  margin: 0;
+  padding: 0;
+}
+
+/* Canvas Frame – full-screen container for canvas */
+.canvas-frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  overflow: hidden;
+  z-index: 1;
+}
+
+
+/* Optionally, change the cursor when active (dragging) */
+.canvas-frame:active {
+  cursor: grabbing;
+}
+
+/* Center the canvas inside the frame and allow zoom/pan */
+#demo-canvas {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 100%;
+  max-height: 100%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Improved Controls Sidebar (right overlay) */
+.controls-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 400px; /* Fluid width with max constraint */
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.8);
+  color: var(--color-text-light);
+  border-left: 1px solid #e0e0e0;
+  border-radius: 8px 0 0 8px;
+  box-shadow: -2px 0 6px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: background 0.3s ease;
+  z-index: 30;
+  overflow-y: auto;
+}
+
+.controls-container h1 {
+  text-align: center;
+  font-size: 1.4em;
+  margin-bottom: 1.5rem;
+}
+
+/* Remove the default arrow/marker from <details> in all major browsers */
+.controls-container details {
+  list-style: none; /* Removes any default bullet or numbering */
+}
+.controls-container details summary::-webkit-details-marker,
+.controls-container details summary::marker {
+  display: none;    /* Hides default arrow in Chrome, Safari, Firefox */
+}
+
+.controls-container details {
+  list-style: none; /* Remove default bullets */
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+  max-height: 3rem; /* Collapsed height (summary only) */
+  margin-bottom: 1.5rem; /* Increased spacing between details */
+}
+
+.controls-container details[open] {
+  max-height: 500px; /* Large enough to show full content */
+}
+
+/* Remove default marker for details/summary in all browsers */
+.controls-container details summary {
+  list-style: none;             /* Remove any default list style */
+  -webkit-appearance: none;     /* Remove default arrow in WebKit browsers */
+  appearance: none;             /* Standard removal for other browsers */
+  position: relative;           /* Establish a positioning context for the custom arrow */
+  padding-right: 2rem;          /* Reserve space for the custom arrow icon */
+}
+
+/* Hide any default marker pseudo-elements */
+.controls-container details summary::-webkit-details-marker {
+  display: none;
+}
+.controls-container details summary::marker {
+  display: none;
+}
+
+/* Custom arrow icon using Font Awesome */
+.controls-container details summary::after {
+  content: "\f078";            /* Unicode for Font Awesome chevron-down */
+  font-family: "Font Awesome 5 Free"; /* Ensure this matches your loaded version */
+  font-weight: 900;
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%); /* Center vertically */
+  transition: transform 0.3s ease;
+}
+
+/* Rotate the arrow when the details element is open */
+.controls-container details[open] summary::after {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+/* Inner content of details animates in */
+.details-content {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  padding: 0 1rem;
+}
+
+/* Divider for control groups */
+.control-divider {
+  border: none;
+  border-top: 1px solid #3f3f3f;
+  margin: 1.5rem 0;
+}
+
+.controls-container details[open] .details-content {
+  opacity: 1;
+}
+
+/* Form Controls & Groups in Sidebar */
+.controls {
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.control-group label {
+  flex: 1;
+  font-size: 0.8em;
+  font-weight: 500;
+  margin-right: 0.5rem;
+}
+
+.control-group input[type="range"],
+.control-group select,
+.control-group input[type="number"] {
+  flex: 2;
+}
+
+.control-group span {
+  width: 2em;
+  text-align: right;
+  margin-left: 0.5rem;
+  font-weight: 500;
+}
+
+/* Range input (slider) styling */
+/* Base styling for the range input */
+input[type="range"] {
+  width: 100%;
+  margin: 0.5rem 0;
+  background: transparent;
+}
+
+/* WebKit track */
+input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 8px;
+  cursor: pointer;
+  background: #ddd;
+  border: 1px solid #aaa;
+  border-radius: 4px; /* Curved edges */
+}
+
+/* WebKit thumb */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  border: 1px solid #888;
+  height: 20px;
+  width: 20px; /* Rectangular shape */
+  border-radius: 4px; /* Curved edges */
+  background: #fff;
+  margin-top: -6px; /* Centers the thumb on the track */
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Mozilla track */
+input[type="range"]::-moz-range-track {
+  width: 100%;
+  height: 8px;
+  cursor: pointer;
+  background: #ddd;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+}
+
+/* Mozilla thumb */
+input[type="range"]::-moz-range-thumb {
+  border: 1px solid #888;
+  height: 20px;
+  width: 20px;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Internet Explorer */
+input[type="range"]::-ms-track {
+  width: 100%;
+  height: 8px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+input[type="range"]::-ms-fill-lower {
+  background: #ddd;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+}
+input[type="range"]::-ms-fill-upper {
+  background: #ddd;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+}
+input[type="range"]::-ms-thumb {
+  border: 1px solid #888;
+  height: 20px;
+  width: 30px;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  margin-top: 0px; /* IE doesn't require negative margin */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Custom Checkbox Styling with Animation */
+input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  background: #fff;
+  margin-right: 0.5rem;
+  cursor: pointer;
+  position: relative;
+  vertical-align: middle;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Pseudo-element for the checkmark */
+input[type="checkbox"]::after {
+  content: "\2713"; /* Unicode checkmark */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0); /* Centered but hidden */
+  opacity: 0;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* Checked state styling with animated checkmark */
+input[type="checkbox"]:checked {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+}
+
+input[type="checkbox"]:checked::after {
+  transform: translate(-50%, -50%) scale(1); /* Reveal the checkmark */
+  opacity: 1;
+}
+
+/* Focus state for accessibility */
+input[type="checkbox"]:focus {
+  outline: none;
+  box-shadow: 0 0 3px var(--color-primary);
+}
+
+/* Prevent text selection on targeted elements (or globally using the universal selector) */
+.no-select,
+.no-select * {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Optionally, disable image dragging */
+img {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+}
+
+/* Custom Select Wrapper */
+.custom-select-wrapper {
+  position: relative;
+  width: 100%;
+  margin: 1rem 0;
+  font-size: 0.9em;
+}
+
+/* Custom Select Box */
+.custom-select {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-secondary, #aaa);
+  border-radius: 4px;
+  background: var(--color-bg-light, #fff);
+  color: var(--color-text-light, #333);
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+  position: relative;
+}
+
+.custom-select:focus {
+  outline: none;
+  border-color: var(--color-primary, #000);
+  box-shadow: 0 0 3px var(--color-primary, #000);
+}
+
+/* Display selected option */
+.custom-select .selected-option {
+  flex: 1;
+}
+
+/* Chevron icon */
+.custom-select i {
+  pointer-events: none;
+  transition: transform 0.3s ease;
+}
+
+.custom-select.active i {
+  transform: rotate(180deg);
+}
+
+/* Options List (hidden by default) */
+.custom-options {
+  position: absolute;
+  top: calc(100% + 0.25rem);
+  left: 0;
+  width: 100%;
+  border: 1px solid var(--color-secondary, #aaa);
+  border-radius: 4px;
+  background: var(--color-bg-light, #fff);
+  color: var(--color-text-light, #333);
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+  z-index: 10;
+}
+
+/* Show options when open */
+.custom-select-wrapper.open .custom-options {
+  max-height: 300px;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Each Option */
+.custom-option {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+/* Hover & Selected State */
+.custom-option:hover,
+.custom-option.selected {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* Dark theme overrides for custom options */
+body[data-theme="dark"] .custom-select,
+body[data-theme="dark"] .custom-options {
+  background: var(--color-bg-light, #1e1e1e);
+  color: var(--color-text-light, #f0f0f0);
+  border-color: var(--color-secondary, #444444);
+}
+
+body[data-theme="dark"] .custom-option:hover,
+body[data-theme="dark"] .custom-option.selected {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Gray out disabled sliders */
+input[type="range"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Bottom Toolbar */
+.bottom-toolbar {
+  position: absolute;
+  bottom: 1rem;
+  left: 44%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: var(--color-text-light);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: background-color 0.3s ease;
+  z-index: 20;
+}
+
+.bottom-toolbar button i {
+  display: inline-block;
+  width: 1.5rem;
+  text-align: center;
+}
+
+.bottom-toolbar:hover,
+.bottom-toolbar:focus-within {
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+.zoom-group,
+.rotate-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+#zoom-value {
+  min-width: 3em;
+  text-align: right;
+  font-weight: 500;
+}
+
+/* Updated Button Styling */
+button {
+  font-family: 'JetBrains Mono', monospace;
+  border: 1px solid #aaa;
+  padding: 0.75em 1.5em;
+  font-size: 0.7em;
+  font-weight: 500;
+  background: var(--color-secondary);
+  color: #00000097;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 0.2em;
+  transition: background 0.3s ease, border-color 0.3s ease, transform 0.1s ease, box-shadow 0.25s ease;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+button:hover {
+  background: var(--color-accent);
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+button:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(46, 46, 46, 0.2);
+}
+
+button:active {
+  transform: scale(0.98);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Modal Styling */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 1.5rem;
+  border: 1px solid var(--color-secondary);
+  border-radius: 8px;
+  text-align: left;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+}
+
+.modal-content h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.modal-content ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.modal-content li {
+  margin-bottom: 0.75rem;
+}
+
+.modal-buttons {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-around;
+}
+
+/* Tooltip container */
+.tooltip {
+  position: relative;
+  top: 0;
+  display: inline-block;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: max-content;
+  max-width: 200px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 1em;
+  position: absolute;
+  z-index: 10;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+/* Tooltip arrow */
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Back to homepage button in the top left corner */
+.home-button {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 50;
+  padding: 0.5rem 1rem;
+  color: #b0b0b0;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  text-decoration: none;
+}
+
+.config-logo {
+  display: block;
+  height: 170px;
+  width: auto;
+  margin: 0 auto;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Version number in the bottom left corner */
+.version-number {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 1rem;
+  z-index: 50;
+  font-size: 0.7rem;
+  color: var(--color-text-light);
+}
+
+kbd {
+  background: #f8f8f8;
+  color: #2e2e2e;
+  border: 3px solid #b4b4b4;
+  border-radius: 4px;
+  padding: 0.3em 0.6em;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9em;
+  box-shadow: inset 0 -1px 2px rgba(0, 0, 0, 0.1);
+  margin: 0 0.2em;
+}
+
+.shortcut-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.shortcut-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #505050;
+}
+
+.shortcut-list li:last-child {
+  border-bottom: none;
+}
+
+.shortcut-keys {
+  font-family: 'JetBrains Mono', monospace;
+  white-space: nowrap;
+}
+
+.shortcut-desc {
+  color: var(--color-text-light, #333);
+  font-size: 0.9em;
+  margin-left: 1rem;
+  flex: 1;
+  text-align: right;
+}
+
+.drag-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+  pointer-events: none;
+  animation: fadeInOverlay 0.5s forwards;
+}
+
+@keyframes fadeInOverlay {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.drag-overlay-content {
+  text-align: center;
+  color: #fff;
+  font-size: 1.5rem;
+  pointer-events: none;
+  animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.drag-overlay-content i {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeInModal {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-content {
+  animation: fadeInModal 0.3s ease-out;
+}
+
+/* --- Custom UI for Bayer Number Select Options --- */
+.bayer-options {
+  display: none;
+  border: 1px solid #444;
+  padding: 1rem;
+  margin-top: 1rem;
+  border-radius: 6px;
+}
+
+.custom-number-input {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #666;
+  border-radius: 4px;
+  padding: 0.2em;
+}
+
+.custom-number-input button {
+  border: none;
+  color: var(--color-text-light, #333);
+  width: 2em;
+  height: 2em;
+  font-size: 1em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.custom-number-input .number-display {
+  width: 2em;
+  text-align: center;
+  color: var(--color-text-light, #333);
+  padding: 0 0.5em;
+  outline: none;
+  user-select: none;
+}
+
+/* ===============================
+   Homepage Specific Additions
+   =============================== */
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--color-text-light);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1em 0;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+
+.navbar-icon {
+  position: absolute;
+  left: 50%;
+  top: 28%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 1024px; /* Fluid width with max constraint */
+  height: auto;
+  animation: navbarIconFadeIn 0.8s ease-out forwards;
+  image-rendering: pixelated;
+}
+
+@keyframes navbarIconFadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -100%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar a {
+  color: var(--color-text-light);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.navbar a:hover {
+  color: var(--color-primary);
+  text-decoration: underline;
+
+}
+
+.navbar ul li {
+  position: relative;
+  padding: 0 1em;
+}
+
+.navbar ul li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 1.5em;
+  background: rgba(213, 213, 213, 0.2);
+}
+
+.navbar a.active {
+  text-decoration: underline;
+  color: var(--color-primary);
+}
+
+
+
+/* Mobile Menu Toggle */
+.menu-toggle {
+  display: none;
+  font-size: 1.5em;
+  cursor: pointer;
+  padding: 0 1em;
+  color: var(--color-text-light);
+}
+
+@media (max-width: 600px) {
+  .navbar ul {
+    flex-direction: column;
+    background: #1e1e1e;
+    position: absolute;
+    top: 60px; /* Adjust if navbar height changes */
+    right: 0;
+    width: 200px;
+    display: none;
+    padding: 1em;
+  }
+  .navbar ul.open {
+    display: flex;
+  }
+  .menu-toggle {
+    display: block;
+  }
+}
+
+.hero-section {
+  position: relative;
+  min-height: 98vh;
+  background: linear-gradient(to bottom, rgba(30, 30, 30, 0.6) 70%, #1e1e1e 100%),
+    url('/top.gif') center/cover no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2em;
+}
+
+.hero-section .navbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+}
+
+.hero-overlay {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-section h1 {
+  font-size: clamp(2.5em, 5vw, 4em);
+  margin-bottom: 0.5em;
+  color: #fff;
+  text-shadow: 0 4px 6px rgba(0, 0, 0, 0.7);
+  padding: 0.3em 0.5em;
+  border-radius: 4px;
+  line-height: 1.2;
+  letter-spacing: 0.05em;
+}
+
+/* Typing effect for each line */
+.typewriter span {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 0;
+  position: relative;
+  animation: typing 1.5s steps(30, end) forwards;
+}
+
+.typewriter span::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 0.15em;
+  background: #fff;
+  animation: blink-caret 0.75s step-end infinite, hide-caret 0.001s forwards;
+}
+
+.typewriter span:nth-child(1) {
+  animation-delay: 0s;
+}
+.typewriter span:nth-child(1)::after {
+  animation-delay: 0s, 1.5s;
+}
+.typewriter span:nth-child(2) {
+  animation-delay: 1.5s;
+}
+.typewriter span:nth-child(2)::after {
+  animation-delay: 0s, 3s;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-caret {
+  from, to { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+@keyframes hide-caret {
+  to { opacity: 0; }
+}
+
+/* --- CTA Button Styling with Flash Animation --- */
+.cta-button {
+  display: inline-block;
+  padding: 0.8em 1.5em;
+  background: var(--color-bg-dark);
+  color: var(--color-text-light);
+  text-decoration: none;
+  font-size: 1.1em;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+  position: relative;
+  animation: ctaFlash 2s infinite;
+}
+
+.cta-button:hover {
+  background: var(--color-accent);
+}
+
+@keyframes ctaFlash {
+  0%, 100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(2);
+  }
+}
+
+/* Content Sections (About, Community, etc.) */
+.content-section {
+  padding: 60px 20px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.content-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.content-section h2 {
+  font-size: 1.8em;
+  text-align: center;
+  margin-bottom: 0.5em;
+  color: var(--color-text-light);
+}
+
+.content-section p {
+  color: var(--color-text-light);
+  max-width: 800px;
+  margin: 0 auto 1em auto;
+  line-height: 1.6;
+}
+
+/* Footer / Credits Section */
+footer {
+  background: #0a0a0a;
+  color: var(--color-text-light);
+  text-align: center;
+  padding: 40px 20px;
+  font-size: 0.9em;
+}
+
+footer a {
+  color: var(--color-text-light);
+  text-decoration: none;
+  transition: text-decoration 0.3s;
+}
+
+footer a:hover {
+  color: var(--color-accent);
+
+}
+
+footer .social-links a {
+  color: var(--color-text-light);
+  font-size: 1.5rem;
+  transition: color 0.3s ease;
+}
+footer .social-links a:hover {
+  color: var(--color-primary);
+}
+
+footer .special-thanks {
+  font-size: 0.8rem;  /* Makes the text smaller */
+  margin-top: 10px;
+  color: #666;
+}
+
+footer .special-thanks a {
+  color: #1DA1F2;         /* Change this to your desired color */
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+footer .special-thanks a:hover {
+  color: #0d8bf2;         /* Optionally a different color on hover */
+}
+
+
+html {
+  scroll-behavior: smooth;
+}
+
+.content-section h2 {
+  font-size: 2.2em;
+  text-align: center;
+  margin-bottom: 0.5em;
+  color: var(--color-text-light);
+}
+
+.content-section h2 i {
+  margin-right: 0.5em;
+}
+
+.section-img {
+  display: block;
+  max-width: 800px;
+  width: 90%;
+  margin: 1rem auto 2rem auto;
+  border-radius: 4px;
+}
+
+/* Back-to-top button styling */
+#back-to-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: var(--color-secondary); /* Your chosen color */
+  color: #fff;
+  border: none;
+  padding: 0.5rem;
+  width: 3rem;  /* Fixed size for a consistent circular shape */
+  height: 3rem;
+  border-radius: 50%;
+  font-size: 1.25rem;
+  cursor: pointer;
+  z-index: 100;
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none; /* Prevents interactions when hidden */
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Show state: fade in and slide up */
+#back-to-top.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Hover effect: slight scale and brightness boost */
+#back-to-top:hover {
+  transform: scale(1.1);
+  filter: brightness(110%);
+}
+
+

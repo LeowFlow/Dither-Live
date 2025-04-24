@@ -1,0 +1,19 @@
+# Rust/WASM
+/wasm/target/
+/wasm/pkg/
+
+# Node / Vite
+dither-live/www/node_modules/
+/www/dist/
+/www/.vite/
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

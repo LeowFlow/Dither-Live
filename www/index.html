@@ -1,105 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dither Demo</title>
-    <link rel="stylesheet" href="/src/style.css" />
-  </head>
-  <body>
-    <div id="app">
-      <div class="main-content">
-        <!-- Left Column: Canvas and Zoom/Pan Controls -->
-        <div class="canvas-container">
-          <div class="canvas-frame">
-            <canvas id="demo-canvas"></canvas>
-          </div>
-          <div class="zoom-controls">
-            <label for="zoom">Zoom:</label>
-            <input type="range" id="zoom" min="1" max="5" step="0.1" value="1">
-            <span id="zoom-value">1</span>
-          </div>
-        </div>
-        <!-- Right Column: Other Controls -->
-        <div class="controls-container">
-          <h1>Dither.WASM</h1>
-          <!-- Algorithm Selector -->
-          <div class="controls">
-            <div class="control-group">
-              <label for="algorithm">Algorithm:</label>
-              <select id="algorithm">
-                <option value="ordered_dither">Bayer-Ordered</option>
-                <option value="floyd-steinberg">Floyd‑Steinberg</option>
-                <option value="threshold">Threshold</option>
-              </select>
-            </div>
-          </div>
-          <!-- Slider Controls -->
-          <div class="controls">
-            <div class="control-group">
-              <label for="contrast">Contrast:</label>
-              <input type="range" id="contrast" min="0" max="200" value="100">
-              <span id="contrast-value">100</span>
-            </div>
-            <div class="control-group">
-              <label for="threshold">Luminance Threshold:</label>
-              <input type="range" id="threshold" min="0" max="255" value="128">
-              <span id="threshold-value">128</span>
-            </div>
-            <div class="control-group">
-              <label for="gamma">Highlights &amp; Midtones:</label>
-              <input type="range" id="gamma" min="0.5" max="2.0" step="0.1" value="1.0">
-              <span id="gamma-value">1.0</span>
-            </div>
-            <div class="control-group">
-              <label for="pixelation">Pixelation:</label>
-              <input type="range" id="pixelation" min="1" max="10" value="1">
-              <span id="pixelation-value">1</span>
-            </div>
-            <div class="control-group">
-              <label for="block-scale">Block Scale</label>
-              <input id="block-scale" type="range" min="1" max="20" step="0.5" value="1">
-              <span id="block-scale-value">1</span>              
-            </div>
-            <div class="control-group">
-              <label for="blur">Blur:</label>
-              <input type="range" id="blur" min="0" max="10" value="0">
-              <span id="blur-value">0</span>
-            </div>
-          </div>
-          <!-- Custom Palette UI -->
-          <div id="palette" class="controls palette-controls">
-            <h2>Custom Color Palette</h2>
-            <div class="control-group">
-              <label for="presetPalettes">Preset Palettes:</label>
-              <select id="presetPalettes"></select>
-            </div>
-            <div id="palette-container" class="palette-container"></div>
-            <div class="control-group">
-              <button id="add-color-btn">+</button>
-              <button id="clear-palette-btn">Clear Palette</button>
-            </div>
-            <div class="control-group">
-              <button id="export-palette-btn">Export Palette</button>
-              <button id="import-palette-btn">Import Palette</button>
-            </div>
-            <textarea id="palette-textarea" rows="3" style="display:none;"></textarea>
-          </div>
-        </div>
+<!-- index.html -->
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BZZRE2NYQ3"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-BZZRE2NYQ3');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free Real-Time Web-Based Dithering Application</title>
+  <meta name="description"
+        content="Free, open-source web-based dithering app for real-time image editing in your browser. No install required." />
+  <meta name="robots" content="index,follow" />
+  <link rel="canonical" href="https://dither.live/" />
+
+  <!-- Open Graph -->
+  <meta property="og:title"       content="Free Real-Time Web-Based Dithering Application" />
+  <meta property="og:description" content="Free, open-source web-based dithering app for real-time retro-style image editing in your browser." />
+  <meta property="og:url"         content="https://dither.live/" />
+  <meta property="og:image"       content="https://dither.live/social-preview-homepage.png" />
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "url": "https://dither.live/",
+    "name": "Dither.Live"
+  }
+  </script>
+
+  <!-- Styles & Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="src/css/reset.css" />
+  <link rel="stylesheet" href="src/css/base.css" />
+  <link rel="stylesheet" href="src/css/layout.css" />
+  <link rel="stylesheet" href="src/css/theme.css" />
+  <link rel="stylesheet" href="src/css/gallery.css" />
+  <link rel="icon" href="/dither-live.ico" type="image/x-icon" />
+
+  <style>
+    html { scroll-behavior: smooth; }
+  </style>
+
+    <!-- Font Awesome -->
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+</head>
+
+  <body data-theme="dark" class="no-select">
+    <!-- Sticky Navbar -->
+    <nav class="navbar">
+      <ul>
+        <li><a href="/app">Continue to Dither.Live →</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="https://discord.gg/kTqDWMHCXU">Discord</a></li>
+        <li><a href="/gallery">Gallery</a></li>
+        <li><a href="#privacy">Privacy Policy</a></li>
+        <li><a href="https://paypal.me/leowflow">Donate</a></li>
+      </ul>
+      <div class="menu-toggle">&#9776;</div>
+    </nav>
+    <!-- Hero Section -->
+    <section id="hero" class="hero-section">
+      <img src="/nav_logo.png" alt="Dither.Live Logo" class="navbar-icon" />
+      <div class="hero-overlay">
+        <h1 class="typewriter">
+          <span>Free, Open Source,</span>
+          <span>Web-Based Dithering Application.</span>
+        </h1>
+        <a href="/app" class="cta-button">
+          <i class="fa-solid fa-pencil-alt"></i> Start Editing Images Now!
+        </a>        
       </div>
-      <!-- Modal Color Picker -->
-      <div id="color-modal" class="modal" style="display:none;">
-        <div class="modal-content">
-          <h3>Edit Color</h3>
-          <input type="color" id="color-picker" value="#ffffff">
-          <div class="modal-buttons">
-            <button id="modal-cancel-btn">Cancel</button>
-            <button id="modal-remove-btn">Remove</button>
-            <button id="modal-select-btn">Select</button>
-          </div>
-        </div>
+    </section>
+    <!-- Back to Top Button -->
+    <button id="back-to-top" aria-label="Back to top">
+      <i class="fas fa-arrow-up"></i>
+    </button>
+    <!-- About & Source Code Section -->
+    <section id="about" class="content-section">
+    <!-- About Header with Icon & Image -->
+      <h2></i>About Dither.Live</h2>
+      <img
+        src="/about.png"
+        alt="About placeholder image"
+        class="section-img"
+      />
+      <p>
+        Dither.Live is a free, open-source, web-based image editor that runs entirely in your browser—no downloads, no plugins. Powered by WebAssembly and modern JavaScript, it delivers lightning-fast performance even on large images, so you can focus on creativity instead of installation.
+      </p>
+    
+      <p>
+        Choose from a suite of industry-standard  and experimental algorithms—<strong>Floyd-Steinberg, Atkinson, Jarvis-Judice-Ninke</strong>, <strong>Bayer Ordered</strong>, plus threshold, pixelation, gamma and blur controls—all adjustable in real time. Every operation happens locally, ensuring your images stay private and your workflow stays seamless.
+      </p>
+    
+      <p>
+      <a href="/gallery" class="cta-link">See examples of images edited in our Gallery →</a>
+      </p>
+    </section>
+    <section id="opensource" class="content-section">
+          <!-- Source Code Header with Icon & Image -->
+          <h2></i>Source Code</h2>
+          <img
+            src="/source.png"
+            alt="Source Code placeholder image"
+            class="section-img"
+          />
+          <p>
+            Built with WebAssembly and modular JavaScript, Dither.Live is a fully open-source web-based image editor designed for clarity, extensibility, and efficient browser-based image processing.  Developers interested in image manipulation, interactive web apps, or performance optimization are encouraged to contribute by submitting pull requests to our <a href="https://github.com/LeowFlow" target="_blank" rel="noopener noreferrer">GitHub repository</a>.
+          </p>          
+          <p></p>
+    </section>
+
+    <!-- Improved Community Section with Clickable Discord Link -->
+    <section id="community" class="content-section">
+      <h2>Join the Community!</h2>
+      <img
+        src="/discord.png"
+        alt="Join our Discord community"
+        class="section-img"
+      />
+      <p>
+        Connect with our vibrant community of creators, designers, and developers on our 
+        <a href="https://discord.gg/kTqDWMHCXU" target="_blank" rel="noopener noreferrer">Discord</a> server. 
+        Share your work in the <strong>#artwork</strong> channel for a chance to be featured in our gallery!
+      </p>
+    </section>
+
+
+    <section id="privacy" class="content-section">
+      <!-- Source Code Header with Icon & Image -->
+      <h2></i>Your privacy matters.</h2>
+      <p>
+        Dither.Live processes all image editing entirely within your browser meaning no images are ever uploaded to our servers, and we never collect personal data or track your usage. Enjoy peace of mind knowing your projects remain secure and completely private at all times.
+      </p>      
+    </section>
+
+
+    <!-- Footer / Credits Section -->
+    <footer id="credits">
+      <p>&copy; 2025 Dither.Live – A Real-Time Dithering Application.</p>
+      <p>Created By Leo Hennessy</p>
+      <div class="social-links">
+        <a href="https://discord.gg/kTqDWMHCXU" target="_blank" rel="noopener noreferrer">
+          <i class="fab fa-discord"></i>
+        </a>
+        <a href="https://github.com/LeowFlow" target="_blank" rel="noopener noreferrer">
+          <i class="fab fa-github"></i>
+        </a>
+        <a href="https://www.linkedin.com/in/leo-hennessy/" target="_blank" rel="noopener noreferrer">
+          <i class="fab fa-linkedin"></i>
+        </a>
       </div>
-    </div>
-    <script type="module" src="/src/main.js"></script>
+      <p class="special-thanks">
+        Also check out
+        <a href="https://ditherit.com" target="_blank" rel="noopener noreferrer">Ditherit!</a>
+        as it has tons of useful and informative resources!
+      </p>
+    </footer>
+    <!-- Homepage JavaScript -->
+    <script type="module" src="src/homepage.js"></script>
+    <script>
+      // Mobile Menu Toggle
+      const menuToggle = document.querySelector(".menu-toggle");
+      const navLinks = document.querySelector(".navbar ul");
+
+      menuToggle.addEventListener("click", function () {
+        navLinks.classList.toggle("open");
+      });
+    </script>
   </body>
 </html>

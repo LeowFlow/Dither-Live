@@ -1,0 +1,122 @@
+      /* Masonry Layout using CSS Columns for the Gallery Grid */
+      .gallery-grid {
+        column-count: 3;
+        column-gap: 1rem;
+        padding: 1rem;
+      }
+      /* Each gallery item now wraps the image and its overlay title */
+      .gallery-item {
+        position: relative;
+        margin-bottom: 1rem;
+        break-inside: avoid;
+      }
+      .gallery-item img {
+        width: 100%;
+        display: block;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+      }
+      /* Title overlay on thumbnails */
+      .gallery-item .thumbnail-title {
+        position: absolute;
+        bottom: 5px;
+        left: 5px;
+        background: rgba(0, 0, 0, 0.6);
+        color: #fff;
+        padding: 2px 6px;
+        font-size: 0.9rem;
+        border-radius: 3px;
+        pointer-events: none;
+      }
+      .gallery-item img:hover {
+        transform: scale(1);
+        opacity: 0.9;
+      }
+      /* Responsive adjustments for smaller screens */
+      @media (max-width: 900px) {
+        .gallery-grid {
+          column-count: 2;
+        }
+      }
+      @media (max-width: 600px) {
+        .gallery-grid {
+          column-count: 1;
+        }
+      }
+      /* Gallery Modal Styles */
+      .gallery-modal {
+        display: none;
+        position: fixed;
+        z-index: 9999; /* Raised z-index to be above the navbar */
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        justify-content: center;
+        align-items: center;
+      }
+      .gallery-modal.active {
+        display: flex;
+      }
+      .gallery-modal .modal-content {
+        max-width: 90%;
+        max-height: 80%;
+        border-radius: 4px;
+        animation: zoomIn 0.3s ease;
+      }
+
+
+      .gallery-modal img {
+        width: auto;
+        height: auto;
+        max-width: 90%;
+        max-height: 80%;
+        object-fit: contain;
+      }
+      @keyframes zoomIn {
+        from {
+          transform: scale(0.8);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      .modal-close {
+        position: absolute;
+        top: 20px;
+        right: 35px;
+        z-index: 10000; /* Ensure the close button is on top within the modal */
+        color: #fff;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: color 0.3s ease;
+      }
+      .modal-close:hover {
+        color: #bbb;
+      }
+     /* Download Button with Icon */
+      .download-button {
+        position: absolute;
+        top: 29px;
+        right: 80px;
+        background: rgba(0, 0, 0, 0.7);
+        color: #fff;
+        padding: 10px 15px;
+        text-decoration: none;
+        border-radius: 4px;
+        font-size: 16px;
+        transition: background 0.3s ease;
+        display: flex;
+        align-items: center;
+      }
+      .download-button:hover {
+        background: rgba(0, 0, 0, 0.9);
+      }
+      .download-button i {
+        margin-right: 5px;
+      }

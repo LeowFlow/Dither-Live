@@ -1,0 +1,50 @@
+/* theme.css */
+/* Dark Theme Adjustments */
+body[data-theme="dark"] {
+  --color-text-light: #f0f0f0;
+  --color-bg-light: #1e1e1e;
+  --color-primary: #ffffff;
+  --color-secondary: #444444;
+  --color-accent: #666666;
+  background-color: #1e1e1e;
+}
+
+body[data-theme="dark"] .controls-container {
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #f0f0f0;
+  border: none;
+}
+
+body[data-theme="dark"] .controls-container:hover,
+body[data-theme="dark"] .controls-container:focus-within {
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+body[data-theme="dark"] .bottom-toolbar {
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #f0f0f0;
+}
+
+body[data-theme="dark"] .bottom-toolbar:hover,
+body[data-theme="dark"] .bottom-toolbar:focus-within {
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+body[data-theme="dark"] .canvas-frame {
+  background-color: #000;
+}
+
+body[data-theme="dark"] .modal-content {
+  background: #2c2c2c;
+  color: #f0f0f0;
+  border-color: var(--color-secondary);
+}
+
+body[data-theme="dark"] button {
+  background: var(--color-secondary);
+  color: #f0f0f0;
+}
+body[data-theme="dark"] button:hover {
+  background: var(--color-accent);
+  color: #f0f0f0;
+}

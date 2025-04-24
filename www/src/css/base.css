@@ -1,0 +1,32 @@
+/* base.css */
+:root {
+  /* Updated to use a modern monospace font */
+  font-family: 'JetBrains Mono', 'Fira Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+  --color-text-light: #2e2e2e;    /* Dark text for light theme */
+  --color-bg-light: #f9f9f9;      /* Light background */
+  --color-text-dark: #f0f0f0;     /* Light text for dark theme */
+  --color-bg-dark: #1e1e1e;       /* Dark background for dark theme */
+  --color-primary: #2e2e2e;       /* Primary accent (dark gray) */
+  --color-secondary: #cccccc;     /* Secondary accent (medium gray) */
+  --color-accent: #bbbbbb;        /* Accent for hovers (slightly darker gray) */
+  --transition-duration: 0.25s;
+}
+
+html {
+  font-size: 16px;
+  line-height: 1.5;
+  color-scheme: light dark;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg-light);
+  color: var(--color-text-light);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
