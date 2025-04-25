@@ -3,9 +3,11 @@
 /wasm/pkg/
 
 # Node / Vite
-dither-live/www/node_modules/
+/www/node_modules/
 /www/dist/
 /www/.vite/
+
+/public/gallery
 
 # OS / editors
 .DS_Store
