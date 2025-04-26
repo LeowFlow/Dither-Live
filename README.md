@@ -1,4 +1,8 @@
-# Dither.Live
+![Dither.Live logo](https://dither.live/nav_logo.png)
+
+---
+
+![Dither.Live demo](https://dither.live/top.gif)
 
 **Free, open-source, real-time web-based dithering application**  
 Powered by Javascript and WebAssembly
